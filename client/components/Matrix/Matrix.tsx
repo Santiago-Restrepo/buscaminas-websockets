@@ -3,7 +3,9 @@ import {
     MatrixProps,
     Cell,
     userGame,
-    User
+    User,
+    Difficulty,
+    ENewUser
 } from './MatrixTypes';
 export function Matrix({
     initialRows = 3,
@@ -21,7 +23,8 @@ export function Matrix({
         mines: initialMines,
         cellsClicked: 0,
         totalCells: (initialRows * initialCols) - initialMines,
-        username: ''
+        username: '',
+        difficulty: Difficulty.easy
     })
     const {
         lose,
@@ -31,10 +34,34 @@ export function Matrix({
         mines,
         cellsClicked,
         totalCells,
-        username
+        username,
+        difficulty
     } = userGame;
     const initialMatrix: Cell[][] = useMemo( () => generateMatrix(rows, cols), [rows, cols]);
     const [leaderboard, setLeaderBoard] = useState<User[]>([]);
+    const sortedLeaderboard = useMemo(() => {
+        const sortedLeaderboard = [...leaderboard].sort((a, b) => {
+            //Sort by hardScore
+            if(a.hardScore > b.hardScore) return -1;
+            if(a.hardScore < b.hardScore) return 1;
+            //Sort by mediumScore
+            if(a.mediumScore > b.mediumScore) return -1;
+            if(a.mediumScore < b.mediumScore) return 1;
+            //Sort by easyScore
+            if(a.easyScore > b.easyScore) return -1;
+            if(a.easyScore < b.easyScore) return 1;
+            return 0;
+        })
+        return sortedLeaderboard;
+    }, [leaderboard]);
+    const [user, setUser] = useState<User>({
+        id: '',
+        username: '',
+        easyScore: 0,
+        mediumScore: 0,
+        hardScore: 0
+    });
+
     const [matrix, setMatrix] = useState<Cell[][]>(initialMatrix);
     const [userInput, setUserInput] = useState<string>('');
     //Functions
@@ -96,7 +123,8 @@ export function Matrix({
             rows,
             cols,
             mines,
-            username
+            username,
+            difficulty
         })
         setMatrix(initialMatrix);
         changeMinesPosition();
@@ -122,16 +150,19 @@ export function Matrix({
                 newValues.rows = 3;
                 newValues.cols = 3;
                 newValues.mines = 1;
+                newUserGame.difficulty = Difficulty.easy;
                 break;
             case 'medium':
                 newValues.rows = 5;
                 newValues.cols = 5;
                 newValues.mines = 3;
+                newUserGame.difficulty = Difficulty.medium;
                 break;
             case 'hard':
                 newValues.rows = 10;
                 newValues.cols = 10;
                 newValues.mines = 10;
+                newUserGame.difficulty = Difficulty.hard;
                 break;
             default:
                 break;
@@ -154,6 +185,32 @@ export function Matrix({
             username: userInput
         })
     }
+    function handleWin(){
+        const newUser = {
+            ...user
+        }
+        switch(difficulty){
+            case Difficulty.easy:
+                newUser.easyScore += 1;
+                break;
+            case Difficulty.medium:
+                newUser.mediumScore += 1;
+                break;
+            case Difficulty.hard:
+                newUser.hardScore += 1;
+                break;
+            default:
+                break;
+        }
+        socket.emit('update-score', newUser);
+        setUser(newUser);
+        setUserGame({
+            ...userGame,
+            win: true
+        })
+        
+        
+    }
 
     //Effects
     useEffect(()=>{
@@ -161,29 +218,36 @@ export function Matrix({
     }, [rows, cols, mines])
     useEffect(()=>{
         if(cellsClicked === totalCells){
-            setUserGame({
-                ...userGame,
-                win: true
-            })
+            handleWin();
         }
     }, [cellsClicked, totalCells])
     useEffect(()=>{ //Socket listeners
-        socket.on('new-user', (users: User[]) => {
-            setLeaderBoard(users);
+        socket.on('new-user', ({
+            user, 
+            leaderboard
+        }: ENewUser) => {
+            if(user){
+                setUser(user);
+            }
+            setLeaderBoard(leaderboard);
         });
-        socket.on('update-score', (user: User) => {
-            
-            
+        socket.on('update-score', (users: User[]) => {
+            setLeaderBoard(users);
         });
     }, []);
 
     return (
         <div className='flex flex-wrap justify-center gap-5'>
             <div className='flex flex-col'>
-
-                <h1 className="text-2xl font-medium text-gray-200 text-center">
+                <h1 className="text-4xl font-medium text-gray-200 text-center">
                     Minesweeper
                 </h1>
+                <span className="text-md font-normal text-gray-200 text-center">
+                    {
+                        user ? `Welcome ${user.username}` : 'Enter your username'
+                    }
+                </span>
+                
                 <h2 
                     className='text-xl font-medium text-green-600 text-center'
                     role='counter'
@@ -319,9 +383,9 @@ export function Matrix({
                             </span>
                         </div>
                         {  
-                            leaderboard?.map((user, i) => (
+                            sortedLeaderboard?.map((user, i) => (
                                 <div className='flex flex-col gap-2 mt-5' key={user.id}>
-                                    <div className='grid grid-cols-5 justify-center'>
+                                    <div className='grid grid-cols-5 justify-center transition-all duration-200'>
                                         <span className='break-all px-1 w-15 text-sm font-normal text-gray-200 text-start leading-none'>
                                             {user.id}
                                         </span>

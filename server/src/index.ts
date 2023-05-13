@@ -27,14 +27,20 @@ io.on('connection', (socket: Socket) => {
         users.push(newUser);
         console.log('New client connected:', newUser.id, newUser.username);
         console.log('Users:', users);
-        socket.broadcast.emit('new-user', users);
-        socket.emit('new-user', users);
+        socket.broadcast.emit('new-user', {
+            user: null,
+            leaderboard: users,
+        });
+        socket.emit('new-user', {
+            user: newUser,
+            leaderboard: users,
+        });
     });
     socket.on('update-score', (user: User) => {
         const userIndex = users.findIndex(u => u.id === user.id);
         users[userIndex] = user;
-        socket.broadcast.emit('update-score', user);
-        socket.emit('update-score', user);
+        socket.broadcast.emit('update-score', users);
+        socket.emit('update-score', users);
     });
     socket.on('disconnect', () => {
         console.log('Client disconnected:', socket.id);

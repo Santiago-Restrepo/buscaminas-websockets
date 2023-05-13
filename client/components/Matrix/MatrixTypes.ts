@@ -15,6 +15,12 @@ export type Cell = {
     y: number;
 }
 
+export enum Difficulty {
+    easy = 'easy',
+    medium = 'medium',
+    hard = 'hard',
+}
+
 export type userGame = {
     lose: boolean
     win: boolean,
@@ -23,6 +29,7 @@ export type userGame = {
     rows: number,
     cols: number,
     mines: number,
+    difficulty: Difficulty,
     username: string,
 }
 
@@ -32,4 +39,10 @@ export type User = {
     easyScore: number,
     mediumScore: number,
     hardScore: number,
+}
+//Events
+
+export type ENewUser = {
+    user: User | null,
+    leaderboard: User[]
 }
