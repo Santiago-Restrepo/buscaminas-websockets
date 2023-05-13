@@ -8,9 +8,9 @@ describe('Matrix component', () => {
     it('should render', () => {
         render(<Matrix />);
     });
-    it('should have "Buscaminas con websockets" as title', () => {
+    it('should have "Minesweeper" as title', () => {
         const { getByText } = render(<Matrix />);
-        expect(getByText('Buscaminas con websockets')).toBeInTheDocument();
+        expect(getByText('Minesweeper')).toBeInTheDocument();
     });
     it('should render 10x10 matrix of buttons', () => {
         const { getAllByRole } = render(<Matrix initialRows={10} initialCols={10}/>);

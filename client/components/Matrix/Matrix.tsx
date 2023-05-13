@@ -154,7 +154,7 @@ export function Matrix({
     return (
         <div className='flex flex-col'>
             <h1 className="text-2xl font-medium text-gray-200 text-center">
-                Buscaminas con websockets
+                Minesweeper
             </h1>
             <h2 
                 className='text-xl font-medium text-green-600 text-center'
