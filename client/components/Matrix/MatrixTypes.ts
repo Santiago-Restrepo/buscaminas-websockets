@@ -1,7 +1,11 @@
+import { Socket } from "socket.io-client";
+
+
 export interface MatrixProps {
     initialRows?: number;
     initialCols?: number;
     initialMines?: number;
+    socket: Socket;
 }
 //Types
 export type Cell = {
@@ -19,4 +23,13 @@ export type userGame = {
     rows: number,
     cols: number,
     mines: number,
+    username: string,
+}
+
+export type User = {
+    id: string,
+    username: string,
+    easyScore: number,
+    mediumScore: number,
+    hardScore: number,
 }
