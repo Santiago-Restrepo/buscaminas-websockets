@@ -1,7 +1,7 @@
 export interface MatrixProps {
-    rows?: number;
-    cols?: number;
-    mines?: number;
+    initialRows?: number;
+    initialCols?: number;
+    initialMines?: number;
 }
 //Types
 export type Cell = {
@@ -15,5 +15,8 @@ export type userGame = {
     lose: boolean
     win: boolean,
     cellsClicked: number,
-    totalCells: number
+    totalCells: number,
+    rows: number,
+    cols: number,
+    mines: number,
 }
