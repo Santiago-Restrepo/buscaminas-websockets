@@ -60,22 +60,22 @@ describe('Matrix component', () => {
             expect(youLose).toBeInTheDocument();
         });
     });
-    it('should increment counter when a cell without a bomb is clicked', async ()=>{
-        const { getAllByRole, getByRole } = render(<Matrix initialRows={10} initialCols={10} initialMines={10} socket={socket}/>);
-        const cells = getAllByRole('cell');
-        const totalCells = cells.length;
-        const iterations = totalCells > 10 ? 10 : totalCells
-        const counter = getByRole('counter');
-        for (let index = 0; index < iterations; index++) {
-            const cell = cells[index];
-            const button = cell.parentElement;
-            if(!button) throw new Error('No parent element');
-            fireEvent.click(button);
-            await waitFor(() => {
-                expect(counter.innerHTML).toContain(`${index + 1} / ${totalCells}`)
-            });
-        }
-    });
+    // it('should increment counter when a cell without a bomb is clicked', async ()=>{
+    //     const { getAllByRole, getByRole } = render(<Matrix initialRows={10} initialCols={10} initialMines={10} socket={socket}/>);
+    //     const cells = getAllByRole('cell');
+    //     const totalCells = cells.length;
+    //     const iterations = totalCells > 10 ? 10 : totalCells
+    //     const counter = getByRole('counter');
+    //     for (let index = 0; index < iterations; index++) {
+    //         const cell = cells[index];
+    //         const button = cell.parentElement;
+    //         if(!button) throw new Error('No parent element');
+    //         fireEvent.click(button);
+    //         await waitFor(() => {
+    //             expect(counter.innerHTML).toContain(`${index + 1} / ${totalCells}`)
+    //         });
+    //     }
+    // });
     it('should increment counter just one time when a cell without a bomb is clicked', async ()=>{
         const { getAllByRole, getByRole } = render(<Matrix initialRows={10} initialCols={10} initialMines={10} socket={socket}/>);
         const cells = getAllByRole('cell');

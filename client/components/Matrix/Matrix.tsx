@@ -258,18 +258,21 @@ export function Matrix({
                     <button
                         className={`bg-green-600 text-gray-200 font-bold py-2 px-4 w-[10rem] h-[3rem] rounded inline-flex items-center justify-center ${rows === 3 ? 'bg-opacity-100' : 'bg-opacity-50'}`}
                         onClick={()=> handleChangeDifficulty('easy')}
+                        role="difficulty-easy"
                     >
                         Easy
                     </button>
                     <button
                         className={`bg-yellow-600 text-gray-200 font-bold py-2 px-4 w-[10rem] h-[3rem] rounded inline-flex items-center justify-center ${rows === 5 ? 'bg-opacity-100' : 'bg-opacity-50'}`}
                         onClick={()=> handleChangeDifficulty('medium')}
+                        role='difficulty-medium'
                     >
                         Medium
                     </button>
                     <button
                         className={`bg-red-600 text-gray-200 font-bold py-2 px-4 w-[10rem] h-[3rem] rounded inline-flex items-center justify-center ${rows === 10 ? 'bg-opacity-100' : 'bg-opacity-50'}`}
                         onClick={()=>{ handleChangeDifficulty('hard')}}
+                        role='difficulty-hard'
                     >
                         Hard
                     </button>
@@ -286,6 +289,7 @@ export function Matrix({
                                         <button 
                                             className='mt-3 bg-green-600 text-gray-200 font-bold py-2 px-4 w-[10rem] h-[3rem] rounded inline-flex items-center justify-center'
                                             onClick={resetGame}
+                                            role='restart-button'
                                         >
                                             Restart
                                         </button>
@@ -301,6 +305,7 @@ export function Matrix({
                                         <button
                                             className='mt-3 bg-green-600 text-gray-200 font-bold py-2 px-4 w-[10rem] h-[3rem] rounded inline-flex items-center justify-center'
                                             onClick={resetGame}
+                                            role='restart-button'
                                         >
                                             Restart
                                         </button>
@@ -322,6 +327,7 @@ export function Matrix({
                                         <button
                                             className='mt-3 bg-green-600 text-gray-200 font-bold py-2 px-4 w-[10rem] h-[3rem] rounded inline-flex items-center justify-center'
                                             onClick={handleUserName}
+                                            role='enter-button'
                                         >
                                             Enter
                                         </button>
